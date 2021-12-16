@@ -1,0 +1,51 @@
+REST API Django + MYSQL + DOCKER Проверка через POSTMAN Django: POST, PUT, GET, DELETE requests
+
+    Собрать и запустить докер-контейнер (по инструкции ниже)
+    Собрать контейнер
+
+    docker-compose -f docker-compose.yml build
+    # Запуск через sudo, если Docker не добавлен в группу sudoers =>
+    {
+        # вдруг в системе еще нет группы docker, то добавляем:
+        sudo groupadd docker - создает группу docker
+        # Добавляем текущего ${USER}пользователя к группе. При необходимости измените имя на доверенное:
+        sudo gpasswd -a ${USER} docker
+        # Перезагружаем докер демон:
+        sudo service docker restart
+    }
+
+Запустить контейнер
+
+    docker-compose -f docker-compose.yml up
+
+    при первом запуске может возникнуть ошибка сервиса web -
+
+    web_1 | django.db.utils.OperationalError: (2002, "Can't connect to MySQL server on 'db' (115)")
+
+лечится следующим образом: дожидаетесь, пока db_1 загрузится и в логе db_1 будет:
+
+    "/usr/sbin/mysqld: ready for connections."
+
+нажимаете 1 раз ctrl+c, дожидаетесь остановки сервиса:
+
+    Stopping web_1 ... done
+    Stopping db_1 ... done
+
+Снова запускаете контейнер (п.2)
+Остановка контейнера (можно повторно запустить):
+
+    docker-compose -f docker-compose.yml stop
+
+Остановка контейнера с удалением контейнера
+
+    docker-compose -f docker-compose.yml down
+
+Добавить суперпользователя (для захода в админку):
+
+    Смотрим список запущенных контейнеров командой:
+
+    docker-compose ps
+
+    Находим контейнер с "web" в имени. Добавляем суперпользователя командой (web_1 - имя контейнера из п.1):
+
+    docker exec -it web_1 python manage.py createsuperuser
