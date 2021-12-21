@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'drf_yasg',  # автодокументация API
     'rest_framework',  # Django REST framework
     'tutorials.apps.TutorialsConfig',  # Tutorials application
+    'avito_parser',  #  Avito parser
 ]
 
 MIDDLEWARE = [

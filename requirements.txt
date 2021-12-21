@@ -6,6 +6,11 @@ django-mysql==3.8.1
 djangorestframework==3.12.4
 django-cors-headers==3.2.1
 
+beautifulsoup4==4.10.0
+
+html5lib
+lxml
+
 #documentation (swagger)
 drf-yasg==1.20.0
 
@@ -22,3 +27,6 @@ sendgrid==6.8.3
 drf-extra-fields
 
 python-dotenv==0.19.2
+
+
+requests~=2.26.0
