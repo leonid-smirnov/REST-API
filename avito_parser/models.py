@@ -18,6 +18,12 @@ class Product(models.Model):
         null=True,
         blank=True,
     )
+    description = models.TextField(
+        verbose_name='Описание объявления',
+        null=True,
+        blank=True,
+    )
+
     url = models.URLField(
         verbose_name='Ссылка на объявление',
         unique=True,

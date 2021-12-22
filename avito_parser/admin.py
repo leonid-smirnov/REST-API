@@ -5,5 +5,5 @@ from .forms import ProductForm
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('title', 'price', 'url')
+    list_display = ('title', 'price', 'currency', 'description', 'url')
     form = ProductForm

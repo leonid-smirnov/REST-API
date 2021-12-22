@@ -17,7 +17,7 @@ class Parser:
     @staticmethod
     def parse_title():
         url = 'https://www.avito.ru/kudrovo/kvartiry/prodam-ASgBAgICAUSSA8YQ?cd=1'  # Ссылка на страницу для парсера
-        response = requests.get(url)  # Подключение к свйту через библиотеку Requests
+        response = requests.get(url)  # Подключение к сайту через библиотеку Requests
         soup = BeautifulSoup(response.text, 'lxml')
 
         titles = soup.find_all('h3', class_='title-root-j7cja iva-item-title-_qCwt title-listRedesign-XHq38 '
@@ -25,16 +25,30 @@ class Parser:
                                             'text-bold-SinUO')  # Парсим блок с заголовком
         price = soup.find_all('meta', attrs={'itemprop': 'price'})  # Парсим блок с ценой
 
+        description = soup.find_all('meta', attrs={'itemprop': 'description'})  # Парсим блок с описанием
+
+        href = soup.find_all('a', 'link-link-MbQDP link-design-default-_nSbv title-root-j7cja iva-item-title-_qCwt '
+                                  'title-listRedesign-XHq38 title-root_maxHeight-SXHes')
 
         for i in range(0, len(titles)):
-            print(titles[i].text)  # Получаем заголовок без тегов
+            print(titles[i].text)  # Получаем текст заголовка без тегов
             price[i] = (price[i].attrs['content'])  # Получаем цену без тегов
+            description[i] = (description[i].attrs['content'])  # Получаем описание без тегов
             int(price[i])
             print(price[i])
+            print(description[i])
+            # print(href[i].text)
+            href[i] = (href[i].attrs['href'])
+
+            a = 'https://www.avito.ru'
+            url_a = (a + (href[i]))
+            print(url_a)
 
             Product.objects.create(
                 title=titles[i].text,
-                price=(price[i]),
+                price=price[i],
+                description=description[i],
+                url=url_a,
             )
 
 
