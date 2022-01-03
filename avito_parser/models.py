@@ -26,7 +26,7 @@ class Product(models.Model):
 
     url = models.URLField(
         verbose_name='Ссылка на объявление',
-        unique=True,
+        unique=False,
         null=True,
         blank=True,
     )
