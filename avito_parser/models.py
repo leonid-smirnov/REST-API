@@ -3,7 +3,8 @@ from django.db import models
 
 class Product(models.Model):
 
-    title = models.TextField(
+    title = models.CharField(
+        max_length=200,
         verbose_name='Заголовок объявления',
         null=True,
         blank=True,
@@ -13,12 +14,16 @@ class Product(models.Model):
         null=True,
         blank=True,
     )
-    currency = models.TextField(
-        verbose_name='Валюта',
+
+    room_number = models.CharField(
+        max_length=15,
+        verbose_name='Количество комнат',
         null=True,
         blank=True,
     )
+
     description = models.TextField(
+        max_length=2000,
         verbose_name='Описание объявления',
         null=True,
         blank=True,
@@ -30,7 +35,7 @@ class Product(models.Model):
         null=True,
         blank=True,
     )
-    published_date = models.DateTimeField(
+    published_date = models.TextField(
         verbose_name='Дата публикации',
         null=True,
         blank=True,

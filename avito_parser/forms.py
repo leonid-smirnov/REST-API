@@ -10,9 +10,15 @@ class ProductForm(forms.ModelForm):  #  Класс форм текстовых �
         model = Product
         fields = (
             'title',
+            'room_number',
+            'published_date',
             'price',
-            'url'
+            'url',
         )
         widgets = {
             'title': forms.TextInput,
+            'room_number': forms.TextInput,
+            'published_date': forms.TextInput,
+            'price': forms.TextInput,
+            'url': forms.TextInput,
         }

@@ -15,8 +15,12 @@ class Parser:
 
     @staticmethod
     def parse_block():
+        p = int(input('Укажите страницу для парсинга: '))
+        p = str(f'p={p}')
+        print(p)
+
         # Ссылка на страницу для парсера
-        url = 'https://www.avito.ru/kudrovo/kvartiry/prodam/vtorichka-ASgBAQICAUSSA8YQAUDmBxSMUg'
+        url = 'https://www.avito.ru/kudrovo/kvartiry/prodam/vtorichka-ASgBAQICAUSSA8YQAUDmBxSMUg?' + p
 
         # Подключение к сайту через библиотеку Requests
         response = requests.get(url)
@@ -33,6 +37,19 @@ class Parser:
                                                           'title-listRedesign-XHq38 title-root_maxHeight-SXHes '
                                                           'text-text-LurtD text-size-s-BxGpL text-bold-SinUO').text
 
+            # Количество комнат
+            room_number = announcement[i].findNext('h3', class_='title-root-j7cja iva-item-title-_qCwt '
+                                                                'title-listRedesign-XHq38 title-root_maxHeight-SXHes '
+                                                                'text-text-LurtD text-size-s-BxGpL text-bold-SinUO').text.strip(
+                ',')
+            # line.split(',')
+            room_number = str(room_number[0: 15].replace(',', ''))
+
+            # Площадь
+
+            date = announcement[i].findNext('div', class_='date-text-VwmJG text-text-LurtD text-size-s-BxGpL '
+                                                          'text-color-noaccent-P1Rfs').text
+
             # Парсим блок с ценой
             price = announcement[i].findNext('span',
                                              class_="price-text-E1Y7h text-text-LurtD text-size-s-BxGpL").text.strip(
@@ -47,18 +64,22 @@ class Parser:
             href = announcement[i].findNext('a', class_='link-link-MbQDP link-design-default-_nSbv title-root-j7cja '
                                                         'iva-item-title-_qCwt title-listRedesign-XHq38 '
                                                         'title-root_maxHeight-SXHes').attrs['href']
-            url_a = 'www.avito.ru' + href  # коннетим основную url со ссылкой на объявление
 
-            print(title)  # Получаем текст заголовка без тегов
-            print(price)  # Получаем цену
-            print(description)
+            url_a = 'www.avito.ru' + href  # коннектим url со ссылкой на объявление
+
+            print(title)
+            print(price)
+            print(room_number)
+            print(date)
             print(url_a)
 
             # Записываем полученнные данные из парсера в БД
             Product.objects.create(
                 title=title,
                 price=price,
+                room_number=room_number,
                 description=description,
+                published_date=date,
                 url=url_a,
             )
 

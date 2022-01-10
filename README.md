@@ -3,10 +3,10 @@ REST API DEV Django + MYSQL + DOCKER
 Django: POST, PUT, GET, DELETE requests 
 
 1. Собрать и запустить докер-контейнер (по инструкции ниже)
-1. Собрать контейнер
+1.1 Собрать контейнер
 > docker-compose -f docker-compose.yml build
 
-Запустить контейнер
+2. Запустить контейнер
 > docker-compose -f docker-compose.yml up
 * при первом запуске может возникнуть ошибка сервиса web - 
 > web_1  | django.db.utils.OperationalError: (2002, "Can't connect to MySQL server on 'db' (115)")
@@ -27,6 +27,9 @@ Django: POST, PUT, GET, DELETE requests
 
 #### Остановка контейнера с удалением контейнера
 > docker-compose -f docker-compose.yml down
+
+#### Остановка контейнера с удалением контейнера и волюмов БД
+> docker-compose -f docker-compose.yml down -v (нужно будет пересоздать суперпользователя)
 
 #### Добавить суперпользователя (для захода в админку):
 1. Смотрим список запущенных контейнеров командой:
