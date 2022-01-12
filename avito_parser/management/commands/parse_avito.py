@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from django.core.management.base import BaseCommand
 from avito_parser.models import Product
+import re
 
 
 class Parser:
@@ -15,6 +16,7 @@ class Parser:
 
     @staticmethod
     def parse_block():
+        # Ввод страницы для парсинга сделан вручную, чтобы избежать блокировки
         p = int(input('Укажите страницу для парсинга: '))
         p = str(f'p={p}')
         print(p)
@@ -30,7 +32,6 @@ class Parser:
         announcement = soup.find_all('div', class_='iva-item-body-R_Q9c')
 
         # Проходим циклом по каждому элементу объявления и возвращаем нужные поля после парсинга
-
         for i in range(0, len(announcement)):
             # Парсим блок с заголовком
             title = announcement[i].findNext('h3', class_='title-root-j7cja iva-item-title-_qCwt '
@@ -40,13 +41,32 @@ class Parser:
             # Количество комнат
             room_number = announcement[i].findNext('h3', class_='title-root-j7cja iva-item-title-_qCwt '
                                                                 'title-listRedesign-XHq38 title-root_maxHeight-SXHes '
-                                                                'text-text-LurtD text-size-s-BxGpL text-bold-SinUO').text.strip(
+                                                                'text-text-LurtD text-size-s-BxGpL '
+                                                                'text-bold-SinUO').text.strip(
                 ',')
-            # line.split(',')
             room_number = str(room_number[0: 15].replace(',', ''))
 
             # Площадь
 
+            # Этаж и этажей
+
+            floor = announcement[i].findNext('h3', class_='title-root-j7cja iva-item-title-_qCwt '
+                                                          'title-listRedesign-XHq38 title-root_maxHeight-SXHes '
+                                                          'text-text-LurtD text-size-s-BxGpL '
+                                                          'text-bold-SinUO').text.split(
+                sep=',')
+            floor = floor[-1].replace('\xa0эт.', '')
+            floor = re.sub('/.*', '', floor, flags=re.DOTALL).strip()
+
+            floors = announcement[i].findNext('h3', class_='title-root-j7cja iva-item-title-_qCwt '
+                                                           'title-listRedesign-XHq38 title-root_maxHeight-SXHes '
+                                                           'text-text-LurtD text-size-s-BxGpL '
+                                                           'text-bold-SinUO').text.split(sep=',')
+
+            floors = floors[-1].strip().replace('\xa0эт.', '')
+            floors = re.sub('.*/', '', floors, flags=re.DOTALL).strip()
+
+            # Парсим блок с датой объявления
             date = announcement[i].findNext('div', class_='date-text-VwmJG text-text-LurtD text-size-s-BxGpL '
                                                           'text-color-noaccent-P1Rfs').text
 
@@ -70,18 +90,21 @@ class Parser:
             print(title)
             print(price)
             print(room_number)
+            print(floor)
+            print(floors)
             print(date)
             print(url_a)
 
             # Записываем полученнные данные из парсера в БД
-            Product.objects.create(
-                title=title,
-                price=price,
-                room_number=room_number,
-                description=description,
-                published_date=date,
-                url=url_a,
-            )
+            # Product.objects.create(
+            #     title=title,
+            #     price=price,
+            #     room_number=room_number,
+            #     floor=floor,
+            #     description=description,
+            #     published_date=date,
+            #     url=url_a,
+            # )
 
 
 class Command(BaseCommand):
