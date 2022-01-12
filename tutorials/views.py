@@ -61,18 +61,10 @@ def tutorial_detail(request, pk):
 
 @api_view(['GET'])
 def tutorial_list_published(request):
-    tutorials = Tutorial.objects.filter(published=True)
-
-    if request.method == 'GET':
-        tutorials_serializer = TutorialSerializer(tutorials, many=True)
-        return JsonResponse(tutorials_serializer.data, safe=False)
-
-
-@api_view(['GET'])
-def tutorial_list_published(request):
 
     tutorials = Tutorial.objects.filter(published=True)
 
     if request.method == 'GET':
         tutorials_serializer = TutorialSerializer(tutorials, many=True)
         return JsonResponse(tutorials_serializer.data, safe=False)
+
