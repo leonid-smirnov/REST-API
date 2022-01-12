@@ -2,7 +2,6 @@ from django.db import models
 
 
 class Product(models.Model):
-
     title = models.CharField(
         max_length=200,
         verbose_name='Заголовок объявления',
@@ -11,6 +10,18 @@ class Product(models.Model):
     )
     price = models.PositiveIntegerField(
         verbose_name='Цена',
+        null=True,
+        blank=True,
+    )
+    floor = models.IntegerField(
+        verbose_name='Этаж квартиры',
+        null=True,
+        blank=True,
+    )
+
+    floors = models.CharField(
+        max_length=5,
+        verbose_name='Этажей в здании',
         null=True,
         blank=True,
     )
@@ -31,11 +42,12 @@ class Product(models.Model):
 
     url = models.URLField(
         verbose_name='Ссылка на объявление',
-        unique=False,
+        unique=True,
         null=True,
         blank=True,
     )
-    published_date = models.TextField(
+    published_date = models.CharField(
+        max_length=20,
         verbose_name='Дата публикации',
         null=True,
         blank=True,

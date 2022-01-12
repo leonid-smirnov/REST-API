@@ -11,6 +11,8 @@ class ProductForm(forms.ModelForm):  #  Класс форм текстовых �
         fields = (
             'title',
             'room_number',
+            'floor',
+            'floors',
             'published_date',
             'price',
             'url',
@@ -19,6 +21,9 @@ class ProductForm(forms.ModelForm):  #  Класс форм текстовых �
             'title': forms.TextInput,
             'room_number': forms.TextInput,
             'published_date': forms.TextInput,
+            'floor': forms.TextInput,
+            'floors': forms.TextInput,
             'price': forms.TextInput,
             'url': forms.TextInput,
+
         }
